@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGGREGATOR.IO</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #0a0a0f; color: #e4e4e7; padding: 40px; overflow-x: hidden; }
+
+        /* Background Layer */
+        body::before {
+            content: ''; position: fixed; inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+            pointer-events: none; z-index: 0;
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; position: relative; z-index: 10; }
+        .header h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -2px; background: linear-gradient(135deg, #fff, #a1a1aa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Protocol Toggle */
+        .toggle-container { display: flex; align-items: center; gap: 12px; background: rgba(24, 24, 27, 0.6); padding: 10px 20px; border-radius: 99px; border: 1px solid rgba(63, 63, 70, 0.4); backdrop-filter: blur(10px); }
+        .switch { position: relative; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; inset: 0; background: #da3633; cursor: pointer; transition: 0.4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background: white; transition: 0.4s; border-radius: 50%; }
+        input:checked + .slider { background: #238636; }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        /* Grid & Card Hover Effects */
+        .grid-top { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; position: relative; z-index: 10; }
+
+        .card {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(63, 63, 70, 0.4);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(99, 102, 241, 0.8);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.2);
+            background: rgba(30, 30, 35, 0.8);
+        }
+
+        .card-ingestion:hover { border-color: #6366f1; }
+        .card-average:hover { border-color: #c084fc; }
+        .card-logs:hover { border-color: #10b981; }
+
+        .result-box { text-align: center; font-size: 5rem; font-weight: 800; color: #c084fc; margin: 20px 0; transition: color 0.3s; }
+        .stats { display: flex; gap: 20px; justify-content: center; }
+        .stat-item { background: rgba(39, 39, 42, 0.5); padding: 20px; border-radius: 12px; width: 180px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.05); transition: transform 0.3s; }
+        .stat-item:hover { transform: scale(1.05); background: rgba(50, 50, 55, 0.6); }
+
+        .log-box { background: #000; color: #10b981; font-family: 'Consolas', monospace; padding: 30px; border-radius: 15px; min-height: 350px; font-size: 0.9rem; line-height: 1.6; border: 1px solid #1e293b; overflow-y: auto; }
+
+        button { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%; transition: all 0.3s; }
+        button:hover { filter: brightness(1.2); transform: scale(1.02); }
+        .btn-hack { background: rgba(218, 54, 51, 0.1); border: 1px solid #da3633; color: #da3633; margin-top: 25px; }
+        .btn-hack:hover { background: #da3633; color: white; }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 100; }
+        .modal-content { background: #161b22; padding: 40px; border-radius: 15px; border: 2px solid #30363d; max-width: 600px; width: 90%; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div><h1>AGGREGATOR.IO</h1><p style="color: #71717a;">CUSTOM AGGREGATION ENGINE</p></div>
+            <div class="toggle-container"><span id="pText" style="color:#238636;font-size:0.75rem;font-weight:700;">SECURE</span><label class="switch"><input type="checkbox" id="pToggle" checked><span class="slider"></span></label></div>
+        </header>
+
+        <div class="grid-top">
+            <section class="card card-ingestion">
+                <h2>📥 Data Ingestion</h2>
+                <p style="color:#71717a; margin-bottom:20px;">Local records processed into Paillier ciphertexts.</p>
+                <form id="uForm">
+                    <div style="border:2px dashed #30363d;padding:30px;border-radius:10px;text-align:center;margin-bottom:20px;">
+                        <input type="file" id="cFile" accept=".csv" required>
+                    </div>
+                    <button type="submit">Process Data</button>
+                </form>
+            </section>
+
+            <section class="card card-average">
+                <h2> Global Average</h2>
+                <div id="avg" class="result-box">₹0</div>
+                <div class="stats">
+                    <div class="stat-item"><div class="stat-label">Total Volume</div><div id="total" class="stat-value">₹0</div></div>
+                    <div class="stat-item"><div class="stat-label">Records</div><div id="count" class="stat-value">0</div></div>
+                </div>
+                <button onclick="hack()" class="btn-hack"> SIMULATE RAM SNAPSHOT</button>
+            </section>
+        </div>
+
+        <section class="card card-logs">
+            <h2>🖥️ Server Memory Logs</h2>
+            <p style="color:#71717a; margin-bottom:15px;">Homomorphic addition on blind ciphertexts.</p>
+            <div id="logs" class="log-box">> SYSTEM ONLINE. WAITING FOR DATA STREAM...</div>
+        </section>
+    </div>
+
+    <div id="hModal" class="modal">
+        <div id="mContent" class="modal-content">
+            <h2 id="hTitle"></h2>
+            <p id="hDesc" style="color:#8b949e;margin-bottom:25px;"></p>
+            <div id="hData" style="background:#000;padding:15px;border-radius:8px;font-family:monospace;word-break:break-all;"></div>
+            <button onclick="document.getElementById('hModal').style.display='none'" class="btn-hack" style="background:#30363d;border:none;color:white;width:auto;padding:10px 30px;">Close Monitor</button>
+        </div>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('pToggle');
+        const logs = document.getElementById('logs');
+
+        toggle.onchange = () => {
+            const isSec = toggle.checked;
+            document.getElementById('pText').innerText = isSec ? "SECURE" : "UNSAFE";
+            document.getElementById('pText').style.color = isSec ? "#238636" : "#da3633";
+            logs.innerHTML += `\n> PROTOCOL SWITCH: ${isSec ? 'SECURE (TOTIENT)' : 'UNSAFE (STANDARD)'}`;
+            logs.scrollTop = logs.scrollHeight;
+        };
+
+        document.getElementById('uForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            formData.append('file', document.getElementById('cFile').files[0]);
+            formData.append('protocol', toggle.checked ? 'homomorphic' : 'standard');
+
+            const res = await fetch('/upload_csv', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            // --- ORGANIZED LOGS START ---
+            let logHtml = `<div style="color:#10b981; font-weight:bold; margin-bottom:10px; border-bottom:1px solid #333; padding-bottom:5px;">━━━ SERVER-SIDE OPS (ENCRYPTED STATE) ━━━</div>`;
+
+            data.logs.forEach(l => {
+                logHtml += `<div style="color:#10b981; padding: 4px 0; border-bottom: 1px solid rgba(30, 41, 59, 0.5);">
+                                [${l.step}] ${l.detail}
+                            </div>`;
+            });
+
+            if(toggle.checked) {
+                logHtml += `<div style="color:#10b981; font-weight:bold; margin-top:15px; border-bottom:1px solid #333; padding-bottom:5px;">━━━ HOMOMORPHIC ADDITION ━━━</div>`;
+                logHtml += `<div style="color:#10b981; margin-top:5px;">> Resulting Ciphertext Sum: <span style="opacity:0.8">${data.final_cipher}</span></div>`;
+                logHtml += `<div style="color:#10b981; margin-top:5px;">> [DONE] Payload returned to client.</div>`;
+            }
+            // --- ORGANIZED LOGS END ---
+
+            logs.innerHTML = logHtml;
+            logs.scrollTop = logs.scrollHeight;
+
+            document.getElementById('avg').innerText = "₹" + data.average.toLocaleString('en-IN');
+            document.getElementById('total').innerText = "₹" + data.total.toLocaleString('en-IN');
+            document.getElementById('count').innerText = data.count;
+        };
+
+        async function hack() {
+            const res = await fetch('/api/hack_attempt', { method: 'POST' });
+            const data = await res.json();
+            if(data.status === 'empty') return alert("RAM is empty.");
+
+            document.getElementById('hModal').style.display = 'flex';
+            const isLeak = data.type === 'PLAINTEXT_LEAK';
+            document.getElementById('mContent').className = 'modal-content ' + (isLeak ? 'hack-success' : 'hack-fail');
+            document.getElementById('hTitle').innerText = isLeak ? "⚠️ DATA BREACH SUCCESSFUL" : "🛡️ ATTACK MITIGATED";
+            document.getElementById('hData').innerText = ">> DATA FOUND: " + data.data;
+        }
+    </script>
+</body>
+</html>
