@@ -2,7 +2,6 @@
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-black?style=flat-square&logo=flask&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-ES2020-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
 ![Cryptography](https://img.shields.io/badge/Paillier-Homomorphic%20Encryption-C9A15A?style=flat-square)
 ![License](https://img.shields.io/badge/License-Unlicensed-lightgrey?style=flat-square)
 
