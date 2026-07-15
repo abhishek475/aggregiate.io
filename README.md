@@ -44,31 +44,31 @@ difference between the two modes can be inspected directly rather than taken on 
 Screenshots are stored in `docs/screenshots/`.
 
 ### Landing page
-![Landing page](docs/screenshots/01-landing.png)
+![Landing page](docs/screenshots/landing.png)
 
 Initial state in secure mode, before any file has been processed. Shows the header, the public
 key strip, and the empty ingestion and aggregate panels.
 
 ### Secure mode result
-![Secure mode result](docs/screenshots/02-secure-result.png)
+![Secure mode result](docs/screenshots/secure-result.png)
 
 After processing a CSV in secure mode. The aggregate panel shows the decrypted total and average,
 the grouped ciphertext ledger, and a server log where every line shows an encrypted value.
 
 ### Secure mode memory snapshot
-![Secure mode memory snapshot](docs/screenshots/03-secure-snapshot-sealed.png)
+![Secure mode memory snapshot](docs/screenshots/secure-snapshot-sealed.png)
 
 Result of the "Snapshot server memory" control while in secure mode. The server has only a
 ciphertext to show, and no private key with which to open it.
 
 ### Standard mode result
-![Standard mode result](docs/screenshots/04-standard-result.png)
+![Standard mode result](docs/screenshots/standard-result.png)
 
 The same CSV processed in standard mode. The server log now shows each plaintext salary as it
 was received.
 
 ### Standard mode memory snapshot
-![Standard mode memory snapshot](docs/screenshots/05-standard-snapshot-leak.png)
+![Standard mode memory snapshot](docs/screenshots/standard-snapshot-leak.png)
 
 Result of the memory snapshot control in standard mode, showing the real total sitting in server
 memory in the clear.
