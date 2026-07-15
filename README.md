@@ -117,11 +117,11 @@ Suresh Babu,51000
 │   └── index.html
 ├── docs/
 │   └── screenshots/
-│       ├── 01-landing.png
-│       ├── 02-secure-result.png
-│       ├── 03-secure-snapshot-sealed.png
-│       ├── 04-standard-result.png
-│       └── 05-standard-snapshot-leak.png
+│       ├── landing.png
+│       ├── secure-result.png
+│       ├── secure-snapshot-sealed.png
+│       ├── standard-result.png
+│       └── standard-snapshot-leak.png
 └── README.md
 ```
 
