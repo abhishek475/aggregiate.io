@@ -1,4 +1,4 @@
-# AGGREGATOR.IO
+# AGGREGATOR-IO
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-black?style=flat-square&logo=flask&logoColor=white)
