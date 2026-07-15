@@ -83,11 +83,7 @@ def aggregate():
 
 @app.route("/api/hack_attempt", methods=["POST"])
 def hack_attempt():
-    """
-    Simulates an attacker who gets read access to this process's memory.
-    This reads whatever /api/aggregate actually stored — the response is
-    not scripted per mode, it reflects real state.
-    """
+
     if not SERVER_STATE["value"]:
         return jsonify({"status": "empty"})
     return jsonify({
