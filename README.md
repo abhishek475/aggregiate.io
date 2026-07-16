@@ -56,13 +56,13 @@ After processing a CSV in secure mode. The aggregate panel shows the decrypted t
 the grouped ciphertext ledger, and a server log where every line shows an encrypted value.
 
 ### Secure mode memory snapshot
-![Secure mode memory snapshot](docs/screenshots/secure-snapshot-sealed.png)
+![Secure mode memory snapshot](docs/screenshots/standard-result.png)
 
 Result of the "Snapshot server memory" control while in secure mode. The server has only a
 ciphertext to show, and no private key with which to open it.
 
 ### Standard mode result
-![Standard mode result](docs/screenshots/standard-result.png)
+![Standard mode result](docs/screenshots/secure-snapshot-sealed.png)
 
 The same CSV processed in standard mode. The server log now shows each plaintext salary as it
 was received.
